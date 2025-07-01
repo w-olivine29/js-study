@@ -16,6 +16,6 @@ const person = {
 person.printName(); //제 이름은 사람1
 person["printName"](); //제 이름은 사람1
 
-// 함수를 객체 프로퍼티로 사용할 경우 화살표함수 사용 x -> this 섹션 참고
+// 함수를 리터럴 객체 프로퍼티로 사용할 경우 화살표함수 사용 x -> section04this_arrow_function 참고
 person.printAge(); //제 나이는 undefined
 person["printAge"](); //제 나이는 undefined
