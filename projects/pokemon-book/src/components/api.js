@@ -16,7 +16,8 @@ export const requestList = async (type, searchWord) => {
 
 	try {
 		const response = await fetch(url);
-		return await response.json();
+		const jsonData = await response.json();
+		return jsonData.data;
 	} catch (err) {
 		console.log(err);
 	}

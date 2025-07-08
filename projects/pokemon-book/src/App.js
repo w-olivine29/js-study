@@ -14,6 +14,19 @@ export default function App($app) {
 	const pokemonList = new PokemonList({
 		$app,
 		initialState: this.state.monsters,
+		handleMonsterType: async (monsetType) => {
+			//새로 불러와야함
+			const momsters = await requestList(monsetType, this.searchWord);
+
+			//console.log(momsters);
+
+			// state 업데이트
+			this.setState({
+				...this.state,
+				monsetType: monsetType,
+				monsters: momsters,
+			});
+		},
 	});
 
 	// 전체 state, 컴포넌트들의 state 변경
@@ -30,7 +43,7 @@ export default function App($app) {
 
 		this.setState({
 			...this.state,
-			monsters: response.data,
+			monsters: response,
 		});
 	};
 

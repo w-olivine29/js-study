@@ -1,7 +1,8 @@
 import { TYPE_MAPPING } from "./typeMapping.js";
 
-export default function PokemonList({ $app, initialState }) {
+export default function PokemonList({ $app, initialState, handleMonsterType }) {
 	this.state = initialState;
+	this.handleMonsterType = handleMonsterType;
 
 	this.$target = document.createElement("div");
 	this.$target.className = "pokemon-list";
@@ -9,6 +10,8 @@ export default function PokemonList({ $app, initialState }) {
 
 	// [[이미지][(정보) [번호][이름][타입]]]
 	this.template = () => {
+		console.log(this.state);
+
 		// 가장 바깥 div는 조건에 상관없이 생성
 		let template = `<div class= "pokemon-list">`;
 		if (this.state) {
@@ -17,7 +20,7 @@ export default function PokemonList({ $app, initialState }) {
 				let typeTemplate = "";
 				element.type.forEach((type) => {
 					// 타입 색상(styles.css 참고), 타입의 한글이름 적용
-					typeTemplate += `<div style="background-color: var(--${type});">${TYPE_MAPPING[type]}</div>`;
+					typeTemplate += `<div id="${type}" style="background-color: var(--${type});">${TYPE_MAPPING[type]}</div>`;
 				});
 
 				template += `<div class="pokemon-wrapper">
@@ -38,6 +41,14 @@ export default function PokemonList({ $app, initialState }) {
 
 	this.render = () => {
 		this.$target.innerHTML = this.template();
+		// 타입 내의 div
+		const types = document.querySelectorAll(".type div");
+		types.forEach((element) => {
+			element.addEventListener("click", (event) => {
+				const type = event.target.id;
+				this.handleMonsterType(type);
+			});
+		});
 	};
 
 	// state 변경 시 재랜더링
