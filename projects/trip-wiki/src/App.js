@@ -6,13 +6,14 @@ import { request } from "./components/api.js";
 
 export default function App($app) {
 	const getSortBy = () => {
-		console.log(window.location.search.length);
+		//console.log(window.location.search.length);
 
 		if (window.location.search) {
 			//window.location.search =>  /{지역}?sort={sortBy}&search={searchWord}
 			//split("sort=") => [/{지역}, {sortBy}&search={searchWord}]
 			//split("&") -> [{sortBy}, search={searchWord}]
 
+			// search -> 쿼리파람 요소 가져옴
 			return window.location.search.split("sort=")[1].split("&")[0];
 		}
 		return "total"; //디폴트값
@@ -22,8 +23,8 @@ export default function App($app) {
 		//window.location.search =>  /{지역}?sort={sortBy}&search={searchWord}
 		//split("search=") =>[{지역}?sort={sortBy}&, {searchWord}]
 
-		console.log(window.location.search.length);
-		console.log(window.location.search.includes("search="));
+		// console.log(window.location.search.length);
+		// console.log(window.location.search.includes("search="));
 
 		if (window.location.search && window.location.search.includes("search=")) {
 			return window.location.search.split("search=")[1];
@@ -148,6 +149,33 @@ export default function App($app) {
 		cityList.setState(this.state.cities);
 		regionList.setState(this.state.region);
 	};
+
+	// 뒤로가기, 앞으로가기 기능
+	//popstate 이벤트 (history.back(), history.forward(), history.go() ...)
+	window.addEventListener("popstate", async () => {
+		const urlPath = window.location.pathname; // 경로 요소만 가져옴
+
+		const prevRegion = urlPath.replace("/", "");
+		const prevSortBy = getSortBy();
+		const prevSearchWord = getSearchWord();
+		const prevStartIdx = 0;
+
+		const prevCities = await request(
+			prevStartIdx,
+			prevRegion,
+			prevSortBy,
+			prevSearchWord
+		);
+
+		this.setState({
+			...this.state,
+			startIdx: prevStartIdx,
+			region: prevRegion,
+			sortBy: prevSortBy,
+			searchWord: prevSearchWord,
+			cities: prevCities,
+		});
+	});
 
 	const init = async () => {
 		const cities = await request(
