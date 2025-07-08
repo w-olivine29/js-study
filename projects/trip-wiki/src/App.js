@@ -5,15 +5,93 @@ import CityDetail from "./components/CityDetail.js";
 import { request } from "./components/api.js";
 
 export default function App($app) {
+	//BUG: url에 search= 포함되는 상황에서 새로고침 시  window.location.search의 반환값이 없음 (길이0 문자열)
+	const getSortBy = () => {
+		console.log(window.location.search.length);
+
+		if (window.location.search) {
+			//window.location.search =>  /{지역}?sort={sortBy}&search={searchWord}
+			//split("sort=") => [/{지역}, {sortBy}&search={searchWord}]
+			//split("&") -> [{sortBy}, search={searchWord}]
+
+			return window.location.search.split("sort=")[1].split("&")[0];
+		}
+		return "total"; //디폴트값
+	};
+
+	const getSearchWord = () => {
+		//window.location.search =>  /{지역}?sort={sortBy}&search={searchWord}
+		//split("search=") =>[{지역}?sort={sortBy}&, {searchWord}]
+
+		console.log(window.location.search.length);
+		console.log(window.location.search.includes("search="));
+
+		if (window.location.search && window.location.search.includes("search=")) {
+			return window.location.search.split("search=")[1];
+		}
+		return ""; //디폴트값
+	};
+
 	this.state = {
 		startIdx: 0,
-		sortBy: "",
-		searchWord: "",
+		sortBy: getSortBy(),
+		searchWord: getSearchWord(),
 		region: "",
 		cities: "",
 	};
 
-	const header = new Header();
+	const header = new Header({
+		$app,
+		initialState: {
+			sortBy: this.state.sortBy,
+			searchWord: this.state.searchWord,
+		},
+		//
+		handleSortChange: async (sortBy) => {
+			// 라우팅 작업
+			const pageUrl = `/${this.state.region}?sort=${sortBy}`;
+			history.pushState(
+				null,
+				null,
+				this.searchWord ? pageUrl + `&search=${this.searchWord}` : pageUrl
+			);
+
+			// 조건에 맞는 새로운 데이터 가져오기
+			const cities = await request(
+				0, //정렬기준이 바뀌었기때문에 시작인덱스를 0으로 세팅
+				this.state.region,
+				sortBy, // 새로운 정렬기준
+				this.searchWord
+			);
+
+			// 전체 state 업데이트
+			this.setState({
+				...this.state,
+				startIdx: 0,
+				sortBy: sortBy,
+				cities: cities,
+			});
+		},
+		handleSearchChange: async (searchWord) => {
+			const pageUrl = `/${this.state.region}&sort=${this.state.sortBy}&search=${searchWord}`;
+			history.pushState(null, null, pageUrl);
+
+			const citeis = await request(
+				0, //새로 검색했기때문에 시작 인덱스를 0으로 세팅
+				this.state.region,
+				this.state.sortBy,
+				searchWord //새로운 검색단어
+			);
+
+			// 전체 state 업데이트
+			this.setState({
+				...this.state,
+				startIdx: 0,
+				searchWord: searchWord,
+				cities: citeis,
+			});
+		},
+	});
 	const regionList = new RegionList();
 	const cityList = new CityList({
 		$app,
@@ -41,8 +119,13 @@ export default function App($app) {
 
 	const cityDetail = new CityDetail();
 
+	// 전체 state 세팅
 	this.setState = (newState) => {
 		this.state = newState;
+		header.setState({
+			sortBy: this.state.sortBy,
+			searchWord: this.state.searchWord,
+		});
 		cityList.setState(this.state.cities);
 	};
 
