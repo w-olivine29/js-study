@@ -15,16 +15,17 @@ export default function App($app) {
 		$app,
 		initialState: this.state.monsters,
 		handleMonsterType: async (monsetType) => {
-			//새로 불러와야함
-			const momsters = await requestList(monsetType, this.searchWord);
+			const pageUrl = `/${monsetType}`;
+			history.pushState(null, null, pageUrl);
 
-			//console.log(momsters);
+			//새로 불러와야함
+			const monsters = await requestList(monsetType, this.searchWord);
 
 			// state 업데이트
 			this.setState({
 				...this.state,
 				monsetType: monsetType,
-				monsters: momsters,
+				monsters: monsters,
 			});
 		},
 	});
