@@ -91,7 +91,25 @@ export default function App($app) {
 			});
 		},
 	});
-	const regionList = new RegionList();
+	const regionList = new RegionList({
+		$app,
+		region: this.state.region,
+		handleRegion: async (region) => {
+			history.pushState(null, null, `/${region}?sort=total`);
+
+			// 지역 선택시, 시작점, 정렬기준, 검색단어 초기화
+			const newCities = await request(0, region, "total");
+
+			this.setState({
+				...this.state,
+				strtIdx: 0,
+				sortBy: "total",
+				region: region,
+				searchWord: "",
+				cities: newCities,
+			});
+		},
+	});
 	const cityList = new CityList({
 		$app,
 		initialState: this.state.cities,
@@ -126,6 +144,7 @@ export default function App($app) {
 			searchWord: this.state.searchWord,
 		});
 		cityList.setState(this.state.cities);
+		regionList.setState(this.state.region);
 	};
 
 	const init = async () => {
