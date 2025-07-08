@@ -52,7 +52,9 @@ export default function App($app) {
 			history.pushState(
 				null,
 				null,
-				this.searchWord ? pageUrl + `&search=${this.searchWord}` : pageUrl
+				this.state.searchWord
+					? pageUrl + `&search=${this.state.searchWord}`
+					: pageUrl
 			);
 
 			// 조건에 맞는 새로운 데이터 가져오기
@@ -60,7 +62,7 @@ export default function App($app) {
 				0, //정렬기준이 바뀌었기때문에 시작인덱스를 0으로 세팅
 				this.state.region,
 				sortBy, // 새로운 정렬기준
-				this.searchWord
+				this.state.searchWord
 			);
 
 			// 전체 state 업데이트
