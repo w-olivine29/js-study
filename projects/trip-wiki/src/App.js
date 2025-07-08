@@ -5,7 +5,6 @@ import CityDetail from "./components/CityDetail.js";
 import { request } from "./components/api.js";
 
 export default function App($app) {
-	//BUG: url에 search= 포함되는 상황에서 새로고침 시  window.location.search의 반환값이 없음 (길이0 문자열)
 	const getSortBy = () => {
 		console.log(window.location.search.length);
 
@@ -73,7 +72,7 @@ export default function App($app) {
 			});
 		},
 		handleSearchChange: async (searchWord) => {
-			const pageUrl = `/${this.state.region}&sort=${this.state.sortBy}&search=${searchWord}`;
+			const pageUrl = `/${this.state.region}?sort=${this.state.sortBy}&search=${searchWord}`;
 			history.pushState(null, null, pageUrl);
 
 			const citeis = await request(
