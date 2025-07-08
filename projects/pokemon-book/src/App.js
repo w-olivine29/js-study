@@ -14,17 +14,17 @@ export default function App($app) {
 	const pokemonList = new PokemonList({
 		$app,
 		initialState: this.state.monsters,
-		handleMonsterType: async (monsetType) => {
-			const pageUrl = `/${monsetType}`;
+		handleMonsterType: async (monsterType) => {
+			const pageUrl = `/${monsterType}`;
 			history.pushState(null, null, pageUrl);
 
 			//새로 불러와야함
-			const monsters = await requestList(monsetType, this.searchWord);
+			const monsters = await requestList(monsterType, this.searchWord);
 
 			// state 업데이트
 			this.setState({
 				...this.state,
-				monsetType: monsetType,
+				monsterType: monsterType,
 				monsters: monsters,
 			});
 		},
