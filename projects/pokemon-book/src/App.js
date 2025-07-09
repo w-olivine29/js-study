@@ -90,6 +90,33 @@ export default function App($app) {
 		});
 	};
 
+	// 뒤로가기 & 앞으로가기
+	window.addEventListener("popstate", async () => {
+		// /{타입}?search={검색단어}
+		// /detail/{id}
+
+		let currentPage = "";
+		let type = "";
+		let searchWord = "";
+		if (location.pathname.includes("detail")) {
+			// Detail 컴포넌트 구현 시 구현
+		} else {
+			currentPage = "list";
+			type = window.location.pathname.replace("/", "");
+			searchWord = window.location.search.split("?search=")[1];
+		}
+
+		const monsters = await requestList(type, searchWord);
+
+		this.setState({
+			...this.state,
+			monsterType: type,
+			searchWord: searchWord,
+			monsters: monsters,
+			currentPage: currentPage,
+		});
+	});
+
 	// 처음 접속 시 실행
 	init();
 }
