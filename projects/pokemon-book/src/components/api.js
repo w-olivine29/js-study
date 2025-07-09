@@ -7,10 +7,11 @@ export const requestList = async (type, searchWord) => {
 	let url = API_URL; //
 
 	if (type && type !== "All") {
-		url += `${type}?`;
+		url += `${type}`;
 	}
+
 	if (searchWord) {
-		url += `search= ${searchWord}`;
+		url += `?search=${searchWord}`;
 	}
 	console.log(url);
 
