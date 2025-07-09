@@ -1,10 +1,10 @@
 export default function Header({
 	$app,
-	currentPage,
+	initialState,
 	moveMainPage,
 	searchMonster,
 }) {
-	this.state = currentPage;
+	this.state = initialState;
 	this.moveMainPage = moveMainPage;
 	this.searchMonster = searchMonster;
 
@@ -55,6 +55,13 @@ export default function Header({
 
 	this.setState = (newState) => {
 		this.state = newState;
+
+		let renderSearch = this.state.searchWord;
+		if (this.state.currentPage !== "detail") {
+			this.$target.querySelector(".search input").value = renderSearch
+				? decodeURIComponent(renderSearch) //디코딩 하지 않으면, 인코딩 문자가 브라우저에 그대로 나타남
+				: "";
+		}
 	};
 
 	this.render();

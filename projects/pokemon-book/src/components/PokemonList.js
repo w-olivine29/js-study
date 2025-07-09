@@ -10,7 +10,7 @@ export default function PokemonList({ $app, initialState, handleMonsterType }) {
 
 	// [[이미지][(정보) [번호][이름][타입]]]
 	this.template = () => {
-		console.log(this.state);
+		//console.log(this.state);
 
 		// 가장 바깥 div는 조건에 상관없이 생성
 		let template = `<div class= "pokemon-list">`;

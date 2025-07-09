@@ -14,7 +14,10 @@ export default function App($app) {
 
 	const header = new Header({
 		$app,
-		currentPage: this.state.currentPage,
+		initialState: {
+			currentPage: this.state.currentPage,
+			searchWord: this.state.searchWord,
+		},
 		moveMainPage: async () => {
 			history.pushState(null, null, "/");
 
@@ -44,8 +47,7 @@ export default function App($app) {
 
 			this.setState({
 				...this.state,
-				monsterType: "",
-				searchWord: "",
+				searchWord: searchWord,
 				currentPage: "list",
 				monsters: monsters,
 			});
@@ -75,7 +77,10 @@ export default function App($app) {
 	this.setState = (newState) => {
 		this.state = newState;
 		pokemonList.setState(this.state.monsters);
-		header.setState(this.state.currentPage);
+		header.setState({
+			currentPage: this.state.currentPage,
+			searchWord: this.state.searchWord,
+		});
 	};
 
 	const init = async () => {
