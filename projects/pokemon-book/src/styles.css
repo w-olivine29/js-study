@@ -154,7 +154,9 @@ body {
 .pokemon-detail {
 	height: calc(100vh - 160px);
 	padding: 0 8%;
-	background-image: url(./img/background.jpeg);
+
+	/*현재 파일위치 기준 상대경로 */
+	background-image: url(../images/background.png);
 	display: flex;
 	align-items: center;
 	justify-content: center;

@@ -24,3 +24,13 @@ app.listen(PORT, () => {
 
 // 서버 실행 (터미널 입력)
 //node ./server/server.js
+
+/* 동작예시
+
+1. 브라우저: GET /detail/25
+2. Express: static 미들웨어 체크
+   - /detail/25 파일 있나? → 없음
+3. Express: app.get("{/*path}, 콜백함수) 라우트 실행
+   - index.html 반환
+4. 브라우저: index.html 로드
+5. JavaScript: /detail/25 경로 해석하여 상세페이지 렌더링 */

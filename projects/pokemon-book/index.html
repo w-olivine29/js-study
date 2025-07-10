@@ -14,6 +14,15 @@
 	</head>
 	<body>
 		<div id="app"></div>
-		<script type="module" src="./src/index.js"></script>
+
+		<!-- 기존) 스크립트의 src를 "./src/index.js" -> 상세페이지만 html 관련 문제 발생 -->
+		<!-- 상대경로 문제  "./src/index.js"
+		나의 착각) index.html 파일이 프로젝트 내 최상위에 있으니까 , 상대경로의 시작도 최상위 기준이라고 생각
+		실제 동작) 브라우저 주소창 URL이 상대경로의 기준점 (HTML 파일의 물리적 위치는 무관) 
+
+		/detail/{id} -> id가 속해있는 경로는 detail -> detail 기준으로 index.js를 찾음 (detail/src/index.js)-> 없음 
+		-->
+		<script type="module" src="/src/index.js"></script>
+		<!-- 절대경로는 현재 위치와 상관없이 루트 디렉토리 부터 시작 -->
 	</body>
 </html>

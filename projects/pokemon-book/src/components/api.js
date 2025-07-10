@@ -24,4 +24,12 @@ export const requestList = async (type, searchWord) => {
 	}
 };
 
-//export const requestDetail = (id) => {};
+export const requestDetail = async (monsterId) => {
+	try {
+		const response = await fetch(`${API_URL}detail/${monsterId}`);
+		const jsonData = await response.json();
+		return jsonData.data;
+	} catch (err) {
+		console.log(err);
+	}
+};

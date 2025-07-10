@@ -18,19 +18,19 @@ export default function Header({
 		// 사용하는 컴포넌트 기준이 아닌 index.html 기준 경로 사용해야함
 		const titleImgUrl = "/images/pokeball.png";
 		const buttonImgUrl = "/images/search.png";
-		let temp = `<div class ="header-content"> <img src="${titleImgUrl}" width =50px></img> 포켓몬 도감 </div>
-         ${
-						this.state !== "detail" &&
-						`<div class ="search">
+		let temp = `<div class ="header-content"> <img src="${titleImgUrl}" width =50px></img> 포켓몬 도감 </div>`;
+
+		if (this.state.currentPageType !== "detail") {
+			temp += `<div class ="search">
                             <input type= "text" placeholder ="포켓몬을 검색하세요">
 							
                             <button>
                             <img src="${buttonImgUrl}"></img>
                             </button>
 							
-                        </div>`
-					}  
-        `;
+                        </div>`;
+		}
+
 		return temp;
 	};
 
@@ -44,7 +44,7 @@ export default function Header({
 				moveMainPage();
 			});
 		// 상세 페이지가 아닐때만 해당 요소 가져와서 이벤트 추가
-		this.state !== "detail" &&
+		this.state.currentPageType !== "detail" &&
 			this.$target.querySelector("button").addEventListener("click", () => {
 				const $input = this.$target.querySelector(".header .search input"); //클래스 선택자
 
@@ -57,7 +57,7 @@ export default function Header({
 		this.state = newState;
 
 		let renderSearch = this.state.searchWord;
-		if (this.state.currentPage !== "detail") {
+		if (this.state.currentPageType !== "detail") {
 			this.$target.querySelector(".search input").value = renderSearch
 				? decodeURIComponent(renderSearch) //디코딩 하지 않으면, 인코딩 문자가 브라우저에 그대로 나타남
 				: "";

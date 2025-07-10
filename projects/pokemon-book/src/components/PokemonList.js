@@ -1,8 +1,14 @@
 import { TYPE_MAPPING } from "./typeMapping.js";
 
-export default function PokemonList({ $app, initialState, handleMonsterType }) {
+export default function PokemonList({
+	$app,
+	initialState,
+	handleMonsterType,
+	handleClickItem,
+}) {
 	this.state = initialState;
 	this.handleMonsterType = handleMonsterType;
+	this.handleClickItem = handleClickItem;
 
 	this.$target = document.createElement("div");
 	this.$target.className = "pokemon-list";
@@ -42,20 +48,32 @@ export default function PokemonList({ $app, initialState, handleMonsterType }) {
 	this.render = () => {
 		this.$target.innerHTML = this.template();
 		// 타입 내의 div
-		const types = document.querySelectorAll(".type div");
-		types.forEach((element) => {
+		const $types = this.$target.querySelectorAll(".type div"); //
+		$types.forEach((element) => {
 			element.addEventListener("click", (event) => {
 				const type = event.target.id;
 				this.handleMonsterType(type);
 			});
 		});
+
+		const $pokemonWrappers = this.$target.querySelectorAll(".pokemon-wrapper");
+
+		$pokemonWrappers.forEach((element) => {
+			const $imgWrapper = element.querySelector(".img-wrapper");
+
+			const $monsterIdx = element.querySelector(".index");
+
+			$imgWrapper.addEventListener("click", () => {
+				this.handleClickItem($monsterIdx.innerText.split(".")[1]);
+			});
+		});
 	};
 
-	// state 변경 시 재랜더링
-	this.setState = (newState) => {
-		this.state = newState;
-		this.render();
-	};
+	// // state 변경 시 재랜더링
+	// this.setState = (newState) => {
+	// 	this.state = newState;
+	// 	this.render();
+	// };
 
 	this.render(); //처음 생성될 때 랜더링
 }
